@@ -93,10 +93,11 @@
 
         const eraWidget = new EraWidget();
         eraWidget.init({
+            eraOrigin: "*", // Fix lỗi Invalid eraOrigin bằng cách cho phép nhận tin nhắn từ mọi nguồn hoặc domain Era
             needRealtimeConfigs: true,
             maxRealtimeConfigsCount: 3,
             onConfiguration: (configuration) => {
-                // Cấu hình 0 cho Nhiệt độ, 1 cho Độ ẩm (dựa trên thiết lập trên Era App)
+                // Cấu hình 0 cho Nhiệt độ, 1 cho Độ ẩm
                 configTemp = configuration.realtime_configs[0];
                 configHumi = configuration.realtime_configs[1];
             },
