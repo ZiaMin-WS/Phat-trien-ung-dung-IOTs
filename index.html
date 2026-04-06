@@ -92,14 +92,18 @@
         let configHumi = null;
 
         const eraWidget = new EraWidget();
+        
+        // Khởi tạo với cấu hình an toàn hơn cho eraOrigin
         eraWidget.init({
-            eraOrigin: "*", // Fix lỗi Invalid eraOrigin bằng cách cho phép nhận tin nhắn từ mọi nguồn hoặc domain Era
+            eraOrigin: window.location.origin === "null" ? "*" : window.location.origin, 
             needRealtimeConfigs: true,
             maxRealtimeConfigsCount: 3,
             onConfiguration: (configuration) => {
                 // Cấu hình 0 cho Nhiệt độ, 1 cho Độ ẩm
-                configTemp = configuration.realtime_configs[0];
-                configHumi = configuration.realtime_configs[1];
+                if (configuration.realtime_configs && configuration.realtime_configs.length > 0) {
+                    configTemp = configuration.realtime_configs[0];
+                    configHumi = configuration.realtime_configs[1];
+                }
             },
             onValues: (values) => {
                 // Cập nhật Nhiệt độ
