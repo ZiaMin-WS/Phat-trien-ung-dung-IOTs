@@ -19,7 +19,6 @@
             overflow: hidden;
         }
 
-        /* Hiệu ứng nền */
         .glow {
             position: absolute;
             width: 400px;
@@ -43,58 +42,26 @@
             padding: 1.25rem;
         }
 
-        /* Bulb Glow Animation - Màu vàng ấm áp */
         .bulb-glow {
-            color: #fbbf24 !important; /* Amber 400 */
+            color: #fbbf24 !important;
             filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.6));
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .bulb-off {
             filter: none;
-            color: #4b5563; /* Gray 600 */
+            color: #4b5563;
             transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         button {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             user-select: none;
-            -webkit-user-select: none;
         }
 
-        /* Hiệu ứng nhấn giữ nút Bật (Xanh biển) */
-        .btn-on-pressing {
-            background-color: #3b82f6 !important; /* Blue 500 */
-            color: white !important;
-            transform: scale(0.95);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-            border-color: rgba(255, 255, 255, 0.2) !important;
-        }
-
-        /* Hiệu ứng nhấn giữ nút Tắt (Đỏ) */
-        .btn-off-pressing {
-            background-color: #ef4444 !important; /* Red 500 */
-            color: white !important;
-            transform: scale(0.95);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
-            border-color: rgba(255, 255, 255, 0.2) !important;
-        }
-
-        /* Trạng thái gạt qua phải (Bật) */
-        .toggle-active {
-            transform: translateX(24px);
-        }
-
-        /* Trạng thái màu xanh khi gạt qua phải */
-        .indicator-on {
-            background-color: #3b82f6 !important; /* Blue 500 */
-            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
-        }
-
-        /* Trạng thái màu xám khi gạt qua trái */
-        .indicator-off {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-        }
+        .toggle-active { transform: translateX(24px); }
+        .indicator-on { background-color: #3b82f6 !important; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+        .indicator-off { background-color: rgba(255, 255, 255, 0.1) !important; }
     </style>
 </head>
 <body>
@@ -102,7 +69,6 @@
     <div class="glow" id="ambientGlow"></div>
 
     <div class="space-y-4 w-full max-w-[360px] p-4">
-        
         <!-- Header -->
         <div class="flex justify-between items-center px-2">
             <div class="flex flex-col">
@@ -121,11 +87,7 @@
                     <span class="text-3xl font-light text-blue-400 mt-1">°</span>
                 </div>
             </div>
-            
             <div class="relative w-20 h-20 flex items-center justify-center">
-                <svg class="absolute w-12 h-12 text-blue-500/10" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                </svg>
                 <svg class="relative z-10 w-16 h-16 text-white" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M17.5,19c-3.037,0-5.5-2.463-5.5-5.5c0-0.122,0.011-0.241,0.022-0.358C10.432,12.44,9,10.386,9,8c0-3.314,2.686-6,6-6 c2.551,0,4.726,1.594,5.586,3.843C21.18,5.321,21.821,5,22.5,5C24.433,5,26,6.567,26,8.5c0,1.558-1.02,2.878-2.433,3.336 C23.864,12.332,24,12.899,24,13.5C24,16.537,21.537,19,18.5,19H17.5z" transform="translate(-5, 2)"></path>
                 </svg>
@@ -141,12 +103,10 @@
                     <span class="text-sm font-medium text-white/30">%</span>
                 </div>
             </div>
-
             <div class="sub-card flex flex-col justify-between border border-white/5">
-                <span class="text-[10px] font-black uppercase tracking-widest opacity-30">Gió</span>
-                <div class="flex items-baseline space-x-1 mt-2">
-                    <span class="text-2xl font-bold">3.2</span>
-                    <span class="text-sm font-medium text-white/30">km/h</span>
+                <span class="text-[10px] font-black uppercase tracking-widest opacity-30">Status</span>
+                <div class="mt-2">
+                    <span id="statusLed" class="text-[10px] font-bold text-blue-400 uppercase tracking-tighter">--</span>
                 </div>
             </div>
         </div>
@@ -160,51 +120,84 @@
                     </svg>
                 </div>
                 <div class="flex flex-col">
-                    <span id="txtLightLabel" class="text-sm font-bold tracking-tight text-white/90">Hệ thống chiếu sáng</span>
+                    <span class="text-sm font-bold tracking-tight text-white/90">Hệ thống chiếu sáng</span>
                     <span class="text-[9px] uppercase opacity-40 font-black tracking-widest">Phòng Lab</span>
                 </div>
             </div>
 
-            <!-- Công tắc tổng (Toggle) -->
             <button id="btnToggle" class="w-full bg-white/5 hover:bg-white/10 py-5 rounded-2xl mb-4 flex justify-between items-center px-6 border border-white/5">
-                <span class="text-xs font-bold text-gray-400">Công tắc tổng</span>
+                <span class="text-xs font-bold text-gray-400">Điều khiển nhanh</span>
                 <div id="toggleIndicator" class="w-12 h-6 indicator-off rounded-full relative transition-all duration-300">
                     <div id="toggleCircle" class="w-4 h-4 bg-white rounded-full absolute top-1 left-1 shadow-md transition-all duration-300"></div>
                 </div>
             </button>
 
-            <!-- Nút nhấn Momentary -->
             <div class="grid grid-cols-2 gap-3">
-                <button id="btnOn" class="bg-white/5 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/5 transition-all">Bật</button>
-                <button id="btnOff" class="bg-white/5 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/5 transition-all">Tắt</button>
+                <button id="turnOn" class="bg-blue-600/10 hover:bg-blue-600 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-blue-600/20 transition-all">Bật đèn</button>
+                <button id="turnOff" class="bg-white/5 hover:bg-red-600 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-white/5 transition-all">Tắt đèn</button>
             </div>
         </div>
     </div>
 
     <script src="https://www.unpkg.com/@eohjsc/era-widget@1.1.3/src/index.js"></script>
     <script>
-        const eraWidget = new EraWidget();
-        let configTemp, configHumi, configLight;
-        let currentLightValue = 0;
+        // Các thành phần UI
+        const tempDisp = document.getElementById('nhietDo');
+        const humiDisp = document.getElementById('doAm');
+        const statusLed = document.getElementById('statusLed');
+        const turnOnBtn = document.getElementById('turnOn');
+        const turnOffBtn = document.getElementById('turnOff');
 
+        // Biến lưu cấu hình
+        let configTemp = null, configHumi = null, configLed = null;
+        let actions = [], currentLedValue = null;
+
+        const eraWidget = new EraWidget();
         eraWidget.init({
-            eraOrigin: window.location.origin === "null" ? "*" : window.location.origin, 
             needRealtimeConfigs: true,
-            maxRealtimeConfigsCount: 5,
-            onConfiguration: (c) => {
-                configTemp = c.realtime_configs[0];
-                configHumi = c.realtime_configs[1];
-                configLight = c.realtime_configs[2];
+            needActions: true,
+            maxRealtimeConfigsCount: 3,
+            maxActionsCount: 2,
+            
+            onConfiguration: (configuration) => {
+                // Thuật toán gán config từ code mới của bạn
+                configTemp = configuration.realtime_configs[0];
+                configHumi = configuration.realtime_configs[1];
+                configLed = configuration.realtime_configs[2];
+                actions = configuration.actions; 
             },
-            onValues: (v) => {
-                if (configTemp && v[configTemp.id]) document.getElementById('nhietDo').innerText = v[configTemp.id].value;
-                if (configHumi && v[configHumi.id]) document.getElementById('doAm').innerText = v[configHumi.id].value;
-                if (configLight && v[configLight.id]) {
-                    currentLightValue = v[configLight.id].value;
-                    updateUI(currentLightValue);
+
+            onValues: (values) => {
+                // Cập nhật Nhiệt độ & Độ ẩm
+                if (configTemp && values[configTemp.id]) tempDisp.innerText = values[configTemp.id].value;
+                if (configHumi && values[configHumi.id]) humiDisp.innerText = values[configHumi.id].value;
+                
+                // Cập nhật trạng thái đèn (LED)
+                if (configLed && values[configLed.id]) {
+                    const valueLed = values[configLed.id].value;
+                    if (currentLedValue !== valueLed) {
+                        currentLedValue = valueLed;
+                        statusLed.innerHTML = (valueLed === 1) ? 'Đèn đang bật' : 'Đèn đang tắt';
+                        updateUI(valueLed);
+                    }
                 }
             }
         });
+
+        // Thuật toán kích hoạt hành động dựa trên danh sách actions nhận được
+        turnOnBtn.addEventListener('click', () => {
+            if (actions.length > 0) eraWidget.triggerAction(actions[0]?.action, null);
+        });
+
+        turnOffBtn.addEventListener('click', () => {
+            if (actions.length > 1) eraWidget.triggerAction(actions[1]?.action, null);
+        });
+
+        // Toggle hỗ trợ đảo trạng thái dựa trên action khả dụng
+        document.getElementById('btnToggle').onclick = () => {
+            const actionToTrigger = (currentLedValue === 1) ? actions[1]?.action : actions[0]?.action;
+            if (actionToTrigger) eraWidget.triggerAction(actionToTrigger, null);
+        };
 
         function updateUI(val) {
             const isON = (val == 1);
@@ -214,51 +207,17 @@
             const indicator = document.getElementById('toggleIndicator');
 
             if (isON) {
-                // Trạng thái bật
                 bulb.className = "w-7 h-7 bulb-glow";
-                cont.className = "p-3 bg-amber-400/10 rounded-2xl transition-all duration-500 border border-amber-400/20";
-                
-                // Toggle gạt sang phải và đổi màu xanh
+                cont.className = "p-3 bg-amber-400/10 rounded-2xl border border-amber-400/20";
                 circle.classList.add('toggle-active');
-                indicator.classList.remove('indicator-off');
-                indicator.classList.add('indicator-on');
+                indicator.classList.replace('indicator-off', 'indicator-on');
             } else {
-                // Trạng thái tắt
                 bulb.className = "w-7 h-7 bulb-off";
-                cont.className = "p-3 bg-white/5 rounded-2xl transition-all duration-500 border border-transparent";
-                
-                // Toggle gạt sang trái và giữ màu xám mờ
+                cont.className = "p-3 bg-white/5 rounded-2xl border border-transparent";
                 circle.classList.remove('toggle-active');
-                indicator.classList.remove('indicator-on');
-                indicator.classList.add('indicator-off');
+                indicator.classList.replace('indicator-on', 'indicator-off');
             }
         }
-
-        // Action: Công tắc tổng
-        document.getElementById('btnToggle').onclick = () => {
-            if (configLight) eraWidget.triggerAction(configLight.id, currentLightValue == 1 ? 0 : 1);
-        };
-
-        // Action: Nút nhấn giữ
-        const setupHold = (id, val) => {
-            const btn = document.getElementById(id);
-            const activeClass = (val === 1) ? 'btn-on-pressing' : 'btn-off-pressing';
-            
-            const start = () => {
-                if (configLight) eraWidget.triggerAction(configLight.id, val);
-                btn.classList.add(activeClass);
-            };
-            const stop = () => btn.classList.remove(activeClass);
-
-            btn.addEventListener('mousedown', start);
-            btn.addEventListener('mouseup', stop);
-            btn.addEventListener('mouseleave', stop);
-            btn.addEventListener('touchstart', (e) => { e.preventDefault(); start(); });
-            btn.addEventListener('touchend', stop);
-        };
-
-        setupHold('btnOn', 1);
-        setupHold('btnOff', 0);
     </script>
 </body>
 </html>
